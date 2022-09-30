@@ -1,0 +1,62 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.json" },
+  "env": { "es6": true },
+  "ignorePatterns": ["node_modules", "build", "coverage"],
+  "plugins": ["import", "eslint-comments", "functional"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "globals": { "BigInt": true, "console": true, "WebAssembly": true },
+  "rules": {
+    "newline-before-return": "warn",
+    "camelcase": "off",
+    "no-console": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      { "selector": "default", "format": ["camelCase"] },
+      { "selector": "typeProperty", "format": ["camelCase", "UPPER_CASE"] },
+      { "selector": "enumMember", "format": ["PascalCase", "UPPER_CASE"] },
+      { "selector": "objectLiteralProperty", "format": ["camelCase", "UPPER_CASE"] },
+      { "selector": "variable", "format": ["camelCase", "UPPER_CASE"] },
+      { "selector": "parameter", "format": ["camelCase"], "leadingUnderscore": "allow" },
+      { "selector": "typeLike", "format": ["PascalCase"] },
+      {
+        "selector": [
+          "classProperty",
+          "objectLiteralProperty",
+          "typeProperty",
+          "classMethod",
+          "objectLiteralMethod",
+          "typeMethod",
+          "accessor",
+          "enumMember"
+        ],
+        "format": null,
+        "modifiers": ["requiresQuotes"]
+      },
+      {
+        "selector": "memberLike",
+        "modifiers": ["private"],
+        "format": ["camelCase"],
+        "leadingUnderscore": "require"
+      },
+      {
+        "selector": "memberLike",
+        "modifiers": ["protected"],
+        "format": ["camelCase"],
+        "leadingUnderscore": "require"
+      }
+    ],
+    "eslint-comments/disable-enable-pair": ["error", { "allowWholeFile": true }],
+    "eslint-comments/no-unused-disable": "error",
+    "import/order": ["warn", { "alphabetize": { "order": "asc" } }],
+    "sort-imports": ["warn", { "ignoreDeclarationSort": true, "ignoreCase": true }]
+  }
+}

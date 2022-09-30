@@ -1,5 +1,4 @@
-import { CURVE } from "@noble/secp256k1";
-import { EcPoint } from "./EcPoint";
+import { CURVE, Point } from "@noble/secp256k1";
 
 export class CryptoContext {
   getModulus(): bigint {
@@ -10,10 +9,10 @@ export class CryptoContext {
     return CURVE.n;
   }
 
-  validatePoint(x: bigint, y: bigint): EcPoint | null /* should't be a bool? */ {
+  validatePoint(x: bigint, y: bigint): Point | null /* should't be a bool? */ {
     try {
-      const point = EcPoint.fromCoordinates(x, y);
-      point.validate();
+      const point = new Point(x, y);
+      point.assertValidity();
 
       return point;
     } catch {
@@ -21,15 +20,15 @@ export class CryptoContext {
     }
   }
 
-  getInfinity(): EcPoint {
-    return EcPoint.infinity;
+  getInfinity(): Point {
+    return Point.ZERO;
   }
 
-  decodePoint(encoded: Uint8Array): EcPoint {
-    return EcPoint.fromHex(encoded);
+  decodePoint(encoded: Uint8Array): Point {
+    return Point.fromHex(encoded);
   }
 
-  getGenerator(): EcPoint {
-    return EcPoint.generator;
+  getGenerator(): Point {
+    return Point.BASE;
   }
 }

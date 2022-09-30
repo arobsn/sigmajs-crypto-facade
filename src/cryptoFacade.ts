@@ -1,41 +1,33 @@
 import { Point } from "@noble/secp256k1";
-import { EcPoint } from "./EcPoint";
 import { CryptoContext } from "./cryptoContext";
 
 export class CryptoFacade {
-  // def normalizePoint(p: Ecp): Ecp = Platform.normalizePoint(p)
-  static normalizePoint(point: EcPoint): EcPoint {
-    return point.normalize();
+  static normalizePoint(point: Point): Point {
+    return Point.fromHex(point.toHex());
   }
 
-  // def createCryptoContext(): CryptoContext = Platform.createContext()
   static createCryptoContext(): CryptoContext {
     return new CryptoContext();
   }
 
-  // def negatePoint(p: Ecp): Ecp = Platform.negatePoint(p)
-  static negatePoint(point: EcPoint): EcPoint {
+  static negatePoint(point: Point): Point {
     return point.negate();
   }
 
-  // def isInfinityPoint(p: Ecp): Boolean = Platform.isInfinityPoint(p)
-  static isInfinityPoint(point: EcPoint): boolean {
-    return point.isInfinity();
+  static isInfinityPoint(point: Point): boolean {
+    return point.equals(Point.ZERO);
   }
 
-  // def multiplyPoint(p: Ecp, n: BigInteger): Ecp = Platform.multiplyPoint(p, n)
-  static multiplyPoint(point: EcPoint, n: bigint): EcPoint {
-    return point.multiply(n);
+  static multiplyPoint(point: Point, scalar: bigint): Point {
+    return point.multiply(scalar);
   }
 
-  // def addPoint(p1: Ecp, p2: Ecp): Ecp = Platform.addPoint(p1, p2)
-  static addPoint(point1: EcPoint, point2: EcPoint): EcPoint {
+  static addPoint(point1: Point, point2: Point): Point {
     return point1.add(point2);
   }
 
-  // def showPoint(p: Ecp): String = Platform.showPoint(p)
-  static showPoint(point: EcPoint): string {
-    return point.toString();
+  static showPoint(point: Point): string {
+    throw Error("Not implemented.");
   }
 
   // def testBitZeroOfFieldElem(p: ECFieldElem): Boolean = Platform.testBitZeroOfFieldElem(p)
@@ -49,22 +41,22 @@ export class CryptoFacade {
   }
 
   // def getXCoord(p: Ecp): ECFieldElem = Platform.getXCoord(p)
-  static getXCoord(point: EcPoint): bigint {
+  static getXCoord(point: Point): bigint {
     return point.x;
   }
 
   // def getYCoord(p: Ecp): ECFieldElem = Platform.getYCoord(p)
-  static getYCoord(point: EcPoint): bigint {
+  static getYCoord(point: Point): bigint {
     return point.y;
   }
 
   // def getAffineXCoord(p: Ecp): ECFieldElem = Platform.getAffineXCoord(p)
-  static getAffineXCoord(point: EcPoint): bigint {
+  static getAffineXCoord(point: Point): bigint {
     return new Point(point.x, point.y).x;
   }
 
   // def getAffineYCoord(p: Ecp): ECFieldElem = Platform.getAffineYCoord(p)
-  static getAffineYCoord(point: EcPoint): bigint {
+  static getAffineYCoord(point: Point): bigint {
     return new Point(point.x, point.y).y;
   }
 }
