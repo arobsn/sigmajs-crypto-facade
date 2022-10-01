@@ -1,4 +1,4 @@
-import { Point } from "@noble/secp256k1";
+import { Point, utils } from "@noble/secp256k1";
 import { CryptoContext } from "./cryptoContext";
 
 export class CryptoFacade {
@@ -27,36 +27,33 @@ export class CryptoFacade {
   }
 
   static showPoint(point: Point): string {
-    throw Error("Not implemented.");
+    const x = point.x.toString(16).substring(0, 6);
+    const y = point.y.toString(16).substring(0, 6);
+
+    return `ECPoint(${x},${y},...)`;
   }
 
-  // def testBitZeroOfFieldElem(p: ECFieldElem): Boolean = Platform.testBitZeroOfFieldElem(p)
   static testBitZeroOfFieldElem(element: bigint): boolean {
     throw Error("Not implemented.");
   }
 
-  // def getEncodedOfFieldElem(p: ECFieldElem): Array[Byte] = Platform.getEncodedOfFieldElem(p)
   static getEncodedOfFieldElem(element: bigint): Uint8Array {
-    throw Error("Not implemented.");
+    return utils._bigintTo32Bytes(element);
   }
 
-  // def getXCoord(p: Ecp): ECFieldElem = Platform.getXCoord(p)
   static getXCoord(point: Point): bigint {
     return point.x;
   }
 
-  // def getYCoord(p: Ecp): ECFieldElem = Platform.getYCoord(p)
   static getYCoord(point: Point): bigint {
     return point.y;
   }
 
-  // def getAffineXCoord(p: Ecp): ECFieldElem = Platform.getAffineXCoord(p)
   static getAffineXCoord(point: Point): bigint {
-    return new Point(point.x, point.y).x;
+    return point.x;
   }
 
-  // def getAffineYCoord(p: Ecp): ECFieldElem = Platform.getAffineYCoord(p)
   static getAffineYCoord(point: Point): bigint {
-    return new Point(point.x, point.y).y;
+    return point.y;
   }
 }
