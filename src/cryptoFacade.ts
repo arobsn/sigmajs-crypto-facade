@@ -34,7 +34,11 @@ export class CryptoFacade {
   }
 
   static testBitZeroOfFieldElem(element: bigint): boolean {
-    throw Error("Not implemented.");
+    return this._testBitOfFieldElem(element, 0);
+  }
+
+  private static _testBitOfFieldElem(element: bigint, index: number): boolean {
+    return (element & BigInt(1 << index)) !== 0n;
   }
 
   static getEncodedOfFieldElem(element: bigint): Uint8Array {

@@ -22,11 +22,12 @@ describe("EC points", () => {
 
   it("Should check infinity point", () => {
     expect(CryptoFacade.isInfinityPoint(infinity)).toBeTruthy();
+    expect(CryptoFacade.isInfinityPoint(p1)).toBeFalsy();
   });
 
   it("Should multiply point", () => {
-    expect(CryptoFacade.multiplyPoint(p1, CURVE.n + 1n)).toEqual(
-      Point.fromHex("0381c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac")
+    expect(CryptoFacade.multiplyPoint(p1, CURVE.n - 1n)).toEqual(
+      Point.fromHex("0281c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac")
     );
   });
 
@@ -41,7 +42,38 @@ describe("EC points", () => {
     expect(CryptoFacade.showPoint(p2)).toBe("ECPoint(198064,811477,...)");
   });
 
-  // it("Should test bit zero field");
+  it("Should test bit zero of field element", () => {
+    const testVectors = [
+      {
+        value: 58696697963552658225209022604545906839720992139040109583461478932841590007980n,
+        expected: false
+      },
+      {
+        value: 99221890655421281687240657051313379827030356718751695543666346070432252019955n,
+        expected: true
+      },
+      {
+        value: 11534674179847572339525410967292119666111600146005056703881161120062101118351n,
+        expected: true
+      },
+      {
+        value: 58384518810610603488166176247797257725226278383152129497027289229952751610898n,
+        expected: false
+      },
+      {
+        value: 53248006962404494469764696243319434838764093672738035895911945007004750906420n,
+        expected: false
+      },
+      {
+        value: 101865731467179904889950494818132658695802833332454014925098273981492319479977n,
+        expected: true
+      }
+    ];
+
+    for (const tv of testVectors) {
+      expect(CryptoFacade.testBitZeroOfFieldElem(tv.value)).toBe(tv.expected);
+    }
+  });
 
   it("Should get encoded fields", () => {
     const p1Bytes = {
