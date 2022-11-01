@@ -1,5 +1,5 @@
-import { Point } from "@noble/secp256k1";
 import { CryptoContext } from "./cryptoContext";
+import { Point } from "./noble-secp256k1";
 
 describe("Crypto context", () => {
   const context = new CryptoContext();

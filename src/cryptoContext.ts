@@ -1,4 +1,4 @@
-import { CURVE, Point } from "@noble/secp256k1";
+import { CURVE, Point } from "./noble-secp256k1";
 
 export class CryptoContext {
   getModulus(): bigint {

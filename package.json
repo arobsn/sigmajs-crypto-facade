@@ -32,9 +32,6 @@
     "cov:json": "jest --coverage --coverageReporters=json",
     "cov:check": "jest --coverage --coverageReporters=text"
   },
-  "dependencies": {
-    "@noble/secp256k1": "^1.6.3"
-  },
   "devDependencies": {
     "@types/jest": "^28.1.6",
     "@typescript-eslint/eslint-plugin": "^5.32.0",

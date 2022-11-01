@@ -1,5 +1,5 @@
-import { Point, utils } from "@noble/secp256k1";
 import { CryptoContext } from "./cryptoContext";
+import { Point, utils } from "./noble-secp256k1";
 
 export class CryptoFacade {
   static normalizePoint(point: Point): Point {
