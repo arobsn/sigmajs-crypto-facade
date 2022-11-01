@@ -1,9 +1,11 @@
+import random from "random-bigint";
 import { CryptoFacade } from "./cryptoFacade";
 import { CURVE, Point } from "./noble-secp256k1";
 
+const p1 = Point.fromHex("0381c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac");
+const p2 = Point.fromHex("02198064ec24024bb8b300e20dd18e33cc1fccb0fea73940bd9a1d3d9d6c3ddd8f");
+
 describe("EC points", () => {
-  const p1 = Point.fromHex("0381c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac");
-  const p2 = Point.fromHex("02198064ec24024bb8b300e20dd18e33cc1fccb0fea73940bd9a1d3d9d6c3ddd8f");
   const infinity = Point.ZERO;
 
   it("Should normalize point", () => {
@@ -26,13 +28,13 @@ describe("EC points", () => {
   });
 
   it("Should multiply point", () => {
-    expect(CryptoFacade.multiplyPoint(p1, CURVE.n - 1n)).toEqual(
+    const order = CURVE.n;
+
+    expect(CryptoFacade.multiplyPoint(p1, order)).toEqual(Point.ZERO);
+    expect(CryptoFacade.multiplyPoint(p1, order - 1n)).toEqual(
       Point.fromHex("0281c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac")
     );
-
-    expect(CryptoFacade.multiplyPoint(p1, CURVE.n)).toEqual(Point.ZERO);
-
-    expect(CryptoFacade.multiplyPoint(p1, CURVE.n + 1n)).toEqual(
+    expect(CryptoFacade.multiplyPoint(p1, order + 1n)).toEqual(
       Point.fromHex("0381c5275b1d50c39a0c36c4561c3a37bff1d87e37a9ad69eab029e426c0b1a8ac")
     );
   });
@@ -103,5 +105,28 @@ describe("EC points", () => {
   it("Should get affine coordinates", () => {
     expect(CryptoFacade.getAffineXCoord(p1)).toBe(p1.x);
     expect(CryptoFacade.getAffineYCoord(p1)).toBe(p1.y);
+  });
+});
+
+describe("Tests from sigmastate-interpreter", () => {
+  // https://github.com/ScorexFoundation/sigmastate-interpreter/blob/e1f434a5c389d7dfc3a99d0cead9627deb54da44/interpreter/shared/src/test/scala/sigmastate/crypto/GroupLawsSpecification.scala#L14
+
+  const identity = Point.ZERO;
+  const order = CURVE.n;
+  let group = Point.ZERO;
+
+  beforeEach(() => {
+    group = new Point(random(256), random(256));
+  });
+
+  it("exponentiation", () => {
+    expect(CryptoFacade.multiplyPoint(group, 0n)).toEqual(identity);
+    expect(CryptoFacade.multiplyPoint(group, 1n)).toEqual(group);
+    expect(CryptoFacade.multiplyPoint(group, order)).toEqual(identity);
+    expect(CryptoFacade.multiplyPoint(group, order + 1n)).toEqual(group);
+  });
+
+  it("double inverse", () => {
+    expect(CryptoFacade.negatePoint(CryptoFacade.negatePoint(group))).toEqual(group);
   });
 });

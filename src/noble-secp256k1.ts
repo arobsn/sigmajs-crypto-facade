@@ -359,7 +359,7 @@ class JacobianPoint {
     const ax = mod(x * iz2);
     const ay = mod(y * iz3);
     const zz = mod(z * iz1);
-    if (zz !== _1n) throw new Error("invZ was invalid");
+    if (zz !== _1n) return Point.ZERO; // throw new Error("invZ was invalid");
     return new Point(ax, ay);
   }
 }
@@ -764,7 +764,7 @@ function ensureBytes(hex: Hex): Uint8Array {
 
 function normalizeScalar(num: number | bigint): bigint {
   if (typeof num === "number" && Number.isSafeInteger(num) && num > 0) return BigInt(num);
-  if (typeof num === "bigint" && isWithinCurveOrder(num)) return num;
+  if (typeof num === "bigint") return num;
   throw new TypeError("Expected valid private scalar: 0 < scalar < curve.n");
 }
 
@@ -819,8 +819,10 @@ function sqrtMod(x: bigint): bigint {
 // Inverses number over modulo
 function invert(number: bigint, modulo: bigint = CURVE.P): bigint {
   if (number === _0n || modulo <= _0n) {
-    throw new Error(`invert: expected positive integers, got n=${number} mod=${modulo}`);
+    return _0n;
+    // throw new Error(`invert: expected positive integers, got n=${number} mod=${modulo}`);
   }
+
   // Eucledian GCD https://brilliant.org/wiki/extended-euclidean-algorithm/
   let a = mod(number, modulo);
   let b = modulo;
