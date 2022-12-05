@@ -60,5 +60,8 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "@noble/hashes": "^1.1.4"
+  }
 }

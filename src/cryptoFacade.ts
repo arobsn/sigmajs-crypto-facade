@@ -1,3 +1,5 @@
+import { hmac } from "@noble/hashes/hmac";
+import { sha512 } from "@noble/hashes/sha512";
 import { CryptoContext } from "./cryptoContext";
 import { Point, utils } from "./noble-secp256k1";
 
@@ -59,5 +61,9 @@ export class CryptoFacade {
 
   static getAffineYCoord(point: Point): bigint {
     return point.y;
+  }
+
+  static hashHmacSHA512(key: Uint8Array, data: Uint8Array): Uint8Array {
+    return hmac(sha512, key, data);
   }
 }
