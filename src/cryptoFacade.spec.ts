@@ -1,3 +1,4 @@
+import { bytesToHex } from "@noble/hashes/utils";
 import random from "random-bigint";
 import { CryptoFacade } from "./cryptoFacade";
 import { CURVE, Point } from "./noble-secp256k1";
@@ -105,6 +106,47 @@ describe("EC points", () => {
   it("Should get affine coordinates", () => {
     expect(CryptoFacade.getAffineXCoord(p1)).toBe(p1.x);
     expect(CryptoFacade.getAffineYCoord(p1)).toBe(p1.y);
+  });
+
+  it("Should generate pbkdf2 key", () => {
+    const testVectors = [
+      {
+        mnemonic:
+          "slow silly start wash bundle suffer bulb ancient height spin express remind today effort helmet",
+        password: "",
+        keyHex:
+          "e97efb594affe44261494fb366f6f3e8f506265b2865d3a5d173c5127d67c5d3fcb5bf7fe1b05cdad344df43ab87796810d545dbcba24f596275d8fceb846c98"
+      },
+      {
+        mnemonic:
+          "slow silly start wash bundle suffer bulb ancient height spin express remind today effort helmet",
+        password: "pwd",
+        keyHex:
+          "0a8ea2ea0c4c12a9df88b005bda00c4de51ff36834b5fcd6a83667c371ad1da94bca1798690d87f2603b8f51d5ae025209e31f6cf81e12b84e4c543d236e58d0"
+      }
+    ];
+
+    for (const tv of testVectors) {
+      expect(bytesToHex(CryptoFacade.generatePbkdf2Key(tv.mnemonic, tv.password))).toBe(tv.keyHex);
+    }
+  });
+
+  it("Should normalize strings", () => {
+    const testVectors = [
+      {
+        raw: "slow silly start wash bundle suffer bulb ancient height spin express remind today effort helmet",
+        normalized:
+          "slow silly start wash bundle suffer bulb ancient height spin express remind today effort helmet"
+      },
+      {
+        raw: "pwd",
+        normalized: "pwd"
+      }
+    ];
+
+    for (const tv of testVectors) {
+      expect(CryptoFacade.normalizeChars(tv.raw)).toBe(tv.normalized);
+    }
   });
 });
 

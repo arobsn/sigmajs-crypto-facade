@@ -1,4 +1,5 @@
 import { hmac } from "@noble/hashes/hmac";
+import { pbkdf2 } from "@noble/hashes/pbkdf2";
 import { sha512 } from "@noble/hashes/sha512";
 import { CryptoContext } from "./cryptoContext";
 import { Point, utils } from "./noble-secp256k1";
@@ -65,5 +66,13 @@ export class CryptoFacade {
 
   static hashHmacSHA512(key: Uint8Array, data: Uint8Array): Uint8Array {
     return hmac(sha512, key, data);
+  }
+
+  static generatePbkdf2Key(normalizedMnemonic: string, normalizedPass: string): Uint8Array {
+    return pbkdf2(sha512, normalizedMnemonic, normalizedPass, { c: 2048, dkLen: 64 });
+  }
+
+  static normalizeChars(chars: string) {
+    return chars.normalize("NFKD");
   }
 }
