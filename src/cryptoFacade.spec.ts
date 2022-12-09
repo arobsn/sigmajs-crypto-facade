@@ -1,4 +1,4 @@
-import { bytesToHex } from "@noble/hashes/utils";
+import { bytesToHex, hexToBytes, utf8ToBytes } from "@noble/hashes/utils";
 import random from "random-bigint";
 import { CryptoFacade } from "./cryptoFacade";
 import { CURVE, Point } from "./noble-secp256k1";
@@ -106,6 +106,37 @@ describe("EC points", () => {
   it("Should get affine coordinates", () => {
     expect(CryptoFacade.getAffineXCoord(p1)).toBe(p1.x);
     expect(CryptoFacade.getAffineYCoord(p1)).toBe(p1.y);
+  });
+
+  it("Should hash HmacSHA512", () => {
+    const testVectors = [
+      {
+        seed: "426974636f696e2073656564",
+        data: "abc",
+        hash: "2c15e87cde0f876fd8f060993748330cbe5f37c8bb3355e8ef44cea57890ec1d9b3274ef2b67bbe046cf8a012fba69796ec7803b1cc227521b9f5191e80a7da2"
+      },
+      {
+        seed: "426974636f696e2073656564",
+        data: "",
+        hash: "300b155f751964276c0536230bd9b16fe7a86533c3cbaa7575e8d0431dbedf23f9945bb8b052bd0b0802c10c7c852e7765b69b61ce7233d9fe5a35ab108ca3b6"
+      },
+      {
+        seed: "426974636f696e2073656564",
+        data: "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+        hash: "888ead7cb2ff330420333cac103f1062a6a443170108f6f74e2cdf39468015ae792c4a822664ce5d865424d2569d67bec03abd2df2a924977d635d06a0b550a3"
+      },
+      {
+        seed: "426974636f696e2073656564",
+        data: "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu",
+        hash: "57edbc19570001de233edcb104237ea81439e59c5b0000d4db7bd991d228453827428d3cf30ecb4cdb17f00de3444579fa771f8933d2a7d9430b56dd989e55d9"
+      }
+    ];
+
+    for (const tv of testVectors) {
+      expect(
+        bytesToHex(CryptoFacade.hashHmacSHA512(hexToBytes(tv.seed), utf8ToBytes(tv.data)))
+      ).toBe(tv.hash);
+    }
   });
 
   it("Should generate pbkdf2 key", () => {
