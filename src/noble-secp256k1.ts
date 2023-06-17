@@ -66,7 +66,7 @@ type Sig = Hex | Signature;
  * For affines cached multiplication, it trades off 1/2 init time & 1/3 ram for 20% perf hit.
  * https://gist.github.com/paulmillr/eb670806793e84df628a7c434a873066
  */
-const USE_ENDOMORPHISM = CURVE.a === _0n;
+const USE_ENDOMORPHISM = false;
 
 class ShaError extends Error {
   constructor(message: string) {
