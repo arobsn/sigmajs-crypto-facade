@@ -1,6 +1,6 @@
 {
   "name": "sigmajs-crypto-facade",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Sigma.JS CryptoFacade library",
   "main": "build/lib/main/index.js",
   "typings": "build/lib/main/index.d.ts",
