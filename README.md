@@ -1,6 +1,6 @@
 # sigmajs-crypto-facade
 
-Crypto facade for Sigma.JS cross compilation support.
+Crypto facade for [sigmastate-interpreter](https://github.com/ScorexFoundation/sigmastate-interpreter) cross compilation support.
 
 # Installation
 
