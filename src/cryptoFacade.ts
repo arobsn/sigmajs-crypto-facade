@@ -72,7 +72,11 @@ export class CryptoFacade {
     return pbkdf2(sha512, normalizedMnemonic, normalizedPass, { c: 2048, dkLen: 64 });
   }
 
-  static normalizeChars(chars: string) {
+  static normalizeChars(chars: string): string {
     return chars.normalize("NFKD");
+  }
+
+  static getRandomBytes(length = 32): Uint8Array {
+    return utils.randomBytes(length);
   }
 }
